@@ -13,7 +13,8 @@ This package provides functions for linear least squares regression. It performs
 The functions only work with numeric data, and error warnings are thrown if any non-numeric data is detected.
 
 The methods perform OLS and WLS using the following known formulas for calculating the Beta $`\sqrt{2}`$ coefficients:
-  - OLS: <img src="https://render.githubusercontent.com/render/math?math= \Beta = (X^{T}X)^{-1}X^{T}y ">
+  - OLS:
+<img src="https://render.githubusercontent.com/render/math?math= \Beta = (X^{T}X)^{-1}X^{T}y">
 ```math
 SE = \frac{\sigma}{\sqrt{n}}
 ```
