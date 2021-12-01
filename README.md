@@ -10,7 +10,7 @@ This package provides functions for linear least squares regression. It performs
   - `get_lin_least_sq_model`
   - `lin_least_squares_train_test`
 
-The functions only work with numeric data, and error warnings are thrown if any non-numeric data is detected.
+The functions only work with numeric data, and error warnings are thrown if any non-numeric data is detected. Errors are also thrown if the size of vectors of predictor variables do not match the size of the vector of target values.
 
 The methods perform linear least squares using the following known formulas for calculating the Beta coefficients of each method:
   - OLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
