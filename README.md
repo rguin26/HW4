@@ -14,7 +14,7 @@ The functions only work with numeric data, and error warnings are thrown if any 
 
 The methods perform OLS and WLS using the following known formulas for calculating the Beta coefficients:
   - OLS:
-<img src="https://render.githubusercontent.com/render/math?math=B = (X^{T}X)^{-1}X^{T}y">
+<img src="https://render.githubusercontent.com/render/math?math=\hat{B} = (X^{T}X)^{-1}X^{T}y">
 ```math
 SE = \frac{\sigma}{\sqrt{n}}
 ```
