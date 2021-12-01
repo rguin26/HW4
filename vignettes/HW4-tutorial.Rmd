@@ -1,0 +1,159 @@
+---
+title: "HW4-tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{HW4-tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(HW4)
+```
+
+## 'get_lin_least_sq_model'
+
+Simple example on how to use the function `get_lin_least_sq_model`:
+
+```{r}
+x <- sample(100, 30, replace=FALSE)
+y <- sample(100, 30, replace=TRUE)
+
+ols_result <- get_lin_least_sq_model(x, y)
+```
+
+The `get_lin_least_sq_model` function performs linear least squares, using either ordinary least squares (OLS) or weighted least squares (WLS). Also, both simple and linear regression can be performed. It returns a list of objects, including calculations of the estimates for the beta coefficients for each predictor, along with residuals and model evaluation metrics.
+
+Other than the main data parameters, x and y, other parameters that the function takes in include `intercept` and `weighted`. `intercept = TRUE` by default, meaning that an intercept will be used for the calculation of the beta coefficients. The values of the beta coefficients vector correspond to their respective column in x, and start with (intercept) if `intercept = TRUE`. `weighted = FALSE` by default, as the function therefore performs OLS. If `weighted = TRUE`, then WLS is performed. The following shows the different options for the same data:
+
+```{r}
+x <- sample(100, 30, replace=FALSE)
+y <- sample(100, 30, replace=TRUE)
+
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+```
+
+This function works with numeric data only, for both x and y. Otherwise, an error is thrown, such as in the following:
+
+```{r}
+x <- c(8, "v", "f", 7, "o")
+y <- c(8, 9, 8, 7, 5)
+```
+
+```{r}
+x <- c(1, 5, 7, 3, 9)
+y <- c(8, "v", "f", 7, "o")
+```
+
+As mentioned before, the `get_lin_least_sq_model` function performs multiple linear regression as well. Below are some examples which use randomly selected numbers, and x can be either a matrix or dataframe.
+
+```{r}
+x <- matrix(sample(100, 30*5, replace=TRUE), ncol = 5)
+y <- sample(100, 30, replace=TRUE)
+
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+```
+
+```{r}
+x <- data.frame(matrix(sample(1000, 30*5, replace=FALSE), ncol = 5))
+y <- sample(100, 30, replace=TRUE)
+
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+```
+
+To view beta coefficients (of any model):
+
+```{r}
+ols_result$beta
+```
+
+To view beta fitted values (of any model):
+
+```{r}
+ols_result_no_intercept$fitted_values
+```
+
+To view residuals (of any model):
+
+```{r}
+wls_result_no_intercept$residuals
+```
+
+And finally, to view model evaluation metrics (of any model):
+
+```{r}
+wls_result$model_eval_metrics
+```
+
+## 'lin_least_squares_train_test'
+
+The `lin_least_squares_train_test` function performs similarly to the `get_lin_least_sq_model` function, only it splits the initial data into training and testing subsets. It randomly selects a specified proportion, 0.8 by default, of instances from x and y, of identical indexes, to use for training the linear least squares model, and then it uses the remaining instances of x and y for testing the model. This function also returns a list of objects, including calculations of the estimates for the beta coefficients for each predictor of the model, trained by the training subset, along with residuals and model evaluation metrics for both training and testing subsets.
+
+Simple example on how to use the function `lin_least_squares_train_test`:
+
+```{r}
+x <- data.frame(matrix(sample(100000, 200*5, replace=TRUE), ncol = 5))
+y <- sample(100, 200, replace=TRUE)
+
+model_stats_1 <- lin_least_squares_train_test(x, y)
+model_stats_2 <- lin_least_squares_train_test(x, y, train_set_prop = 0.75)
+model_stats_3 <- lin_least_squares_train_test(x, y, weighted = TRUE, train_set_prop = 0.75)
+```
+
+To view beta:
+
+```{r}
+model_stats_1$beta
+```
+
+To view training fitted values:
+
+```{r}
+model_stats_2$training_fitted_values
+```
+
+To view training residuals:
+
+```{r}
+model_stats_2$training_residuals
+```
+
+To view training model evaluation metrics:
+
+```{r}
+model_stats_3$training_model_eval_metrics
+```
+
+To view testing fitted values:
+
+```{r}
+model_stats_1$testing_fitted_values
+```
+
+To view testing residuals:
+
+```{r}
+model_stats_3$testing_residuals
+```
+
+To view testing model evaluation metrics:
+
+```{r}
+model_stats_3$testing_model_eval_metrics
+```
