@@ -12,9 +12,9 @@ This package provides functions for linear least squares regression. It performs
 
 The functions only work with numeric data, and error warnings are thrown if any non-numeric data is detected.
 
-The methods perform OLS and WLS using the following known formulas for calculating the Beta coefficients:
-  - OLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
-  - WLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
-
-
-<img src="https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1">
+The methods perform linear least squares using the following known formulas for calculating the Beta coefficients of each method:
+OLS:
+<img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
+WLS:
+<img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
+<img src="https://render.githubusercontent.com/render/math?math=S(\hat{\beta}) = \sum_{i=1}^{}">
