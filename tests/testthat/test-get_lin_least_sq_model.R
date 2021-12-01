@@ -1,4 +1,4 @@
-test_that("x and/or y is not numeric") {
+test_that("x and/or y is not numeric", {
   x1 <- c("2", "g", 4, 2, 9)
   y1 <- 10:14
   expect_error(get_lin_least_sq_model(x1, y1))
@@ -8,9 +8,9 @@ test_that("x and/or y is not numeric") {
   x3 <- c(0, 6, 3, 2, 5)
   y3 <- c(1, "t", "7", "e", "10")
   expect_error(get_lin_least_sq_model(x3, y3))
-}
+})
 
-test_that("x and y do not have matching number of instances") {
+test_that("x and y do not have matching number of instances", {
   x1 <- 2:5
   y1 <- 10:17
   expect_error(get_lin_least_sq_model(x1, y1))
@@ -20,7 +20,7 @@ test_that("x and y do not have matching number of instances") {
   x3 <- data.frame(matrix(sample(1000, 33*5, replace=FALSE), ncol = 5))
   y3 <- sample(100, 30, replace=TRUE)
   expect_error(get_lin_least_sq_model(x3, y3))
-}
+})
 
 test_that("OLS with x as a vector", {
   x <- sample(100, 30, replace=FALSE)
