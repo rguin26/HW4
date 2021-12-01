@@ -42,6 +42,7 @@
 #'   root mean squared error (RMSE), mean absolute error (MAE), r-squared, and
 #'   adjusted r-squared
 #' }
+#'
 #' @examples
 #' # Example 1
 #' x <- sample(100, 30, replace=FALSE)
