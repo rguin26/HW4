@@ -14,7 +14,7 @@ The functions only work with numeric data, and error warnings are thrown if any 
 
 The methods perform linear least squares using the following known formulas for calculating the Beta coefficients of each method:
   - OLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
-  - WLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}WX)^{-1}X^{T}Wy"> (more info about how the weights are calculated: https://en.wikipedia.org/wiki/Weighted_least_squares)
+  - WLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}WX)^{-1}X^{T}Wy"> (more info about how the weights are calculated: https://online.stat.psu.edu/stat501/lesson/13/13.1)
 
 The `get_lin_least_sq_model` method is used in the following way: `get_lin_least_sq_model(x, y, intercept = TRUE, weighted = FALSE)`
   - `x` is a matrix, dataframe, or vector of all predictor/predictors and its/their respective values
