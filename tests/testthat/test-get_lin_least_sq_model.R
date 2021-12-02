@@ -36,6 +36,21 @@ test_that("OLS with x as a vector", {
   expect_equal(temp_sum, length(ols_result$residuals))
 })
 
+test_that("OLS with x as a vector, no intercept - timing", {
+  x <- sample(100, 30, replace=FALSE)
+  y <- sample(100, 30, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ ., temp_data)
+    model$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})
+
 test_that("WLS with x as a vector", {
   x <- sample(300, 50, replace=FALSE)
   y <- sample(900, 50, replace=TRUE)
@@ -52,6 +67,23 @@ test_that("WLS with x as a vector", {
   expect_equal(temp_sum, length(wls_result$residuals))
 })
 
+test_that("OLS with x as a vector, no intercept - timing", {
+  x <- sample(300, 50, replace=FALSE)
+  y <- sample(900, 50, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ ., temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(y ~ ., temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})
+
 test_that("OLS with x as a vector, no intercept", {
   x <- sample(200, 60, replace=FALSE)
   y <- sample(400, 60, replace=TRUE)
@@ -64,6 +96,21 @@ test_that("OLS with x as a vector, no intercept", {
   expect_equal(temp_sum, length(ols_result$fitted_values))
   temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(ols_result$residuals))
+})
+
+test_that("OLS with x as a vector, no intercept - timing", {
+  x <- sample(200, 60, replace=FALSE)
+  y <- sample(400, 60, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ . - 1, temp_data)
+    model$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("WLS with x as a vector, no intercept", {
@@ -82,6 +129,23 @@ test_that("WLS with x as a vector, no intercept", {
   expect_equal(temp_sum, length(wls_result$residuals))
 })
 
+test_that("WLS with x as a vector, no intercept - timing", {
+  x <- sample(500, 100, replace=FALSE)
+  y <- sample(800, 100, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ . - 1, temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(y ~ . - 1, temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})
+
 test_that("OLS with x as a matrix", {
   x <- matrix(sample(1000, 30*5, replace=FALSE), ncol = 5)
   y <- sample(100, 30, replace=TRUE)
@@ -94,6 +158,21 @@ test_that("OLS with x as a matrix", {
   expect_equal(temp_sum, length(ols_result$fitted_values))
   temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(ols_result$residuals))
+})
+
+test_that("OLS with x as a matrix - timing", {
+  x <- matrix(sample(1000, 30*5, replace=FALSE), ncol = 5)
+  y <- sample(100, 30, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ ., temp_data)
+    model$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("WLS with x as a matrix", {
@@ -112,6 +191,23 @@ test_that("WLS with x as a matrix", {
   expect_equal(temp_sum, length(wls_result$residuals))
 })
 
+test_that("WLS with x as a matrix - timing", {
+  x <- matrix(sample(1000, 60*5, replace=FALSE), ncol = 5)
+  y <- sample(400, 60, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ ., temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(y ~ ., temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})
+
 test_that("OLS with x as a matrix, no intercept", {
   x <- matrix(sample(1000, 60*5, replace=FALSE), ncol = 5)
   y <- sample(400, 60, replace=TRUE)
@@ -124,6 +220,21 @@ test_that("OLS with x as a matrix, no intercept", {
   expect_equal(temp_sum, length(ols_result$fitted_values))
   temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(ols_result$residuals))
+})
+
+test_that("OLS with x as a matrix, no intercept - timing", {
+  x <- matrix(sample(1000, 60*5, replace=FALSE), ncol = 5)
+  y <- sample(400, 60, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ . - 1, temp_data)
+    model$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("WLS with x as a matrix, no intercept", {
@@ -140,6 +251,23 @@ test_that("WLS with x as a matrix, no intercept", {
   expect_equal(temp_sum, length(wls_result$fitted_values))
   temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(wls_result$residuals))
+})
+
+test_that("WLS with x as a matrix, no intercept - timing", {
+  x <- matrix(sample(1000, 100*3, replace=FALSE), ncol = 3)
+  y <- sample(800, 100, replace=TRUE)
+  temp_data <- data.frame(x, y)
+  time1 <- bench::system_time({
+    model <- lm(y ~ . - 1, temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(y ~ . - 1, temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("OLS with x as a data frame", {
@@ -160,6 +288,27 @@ test_that("OLS with x as a data frame", {
   expect_equal(temp_sum, length(ols_result$fitted_values))
   temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(ols_result$residuals))
+})
+
+test_that("OLS with x as a data frame - timing", {
+  temp_data <- data.frame(
+    hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+    age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+    weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+    score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+  )
+  x <- temp_data
+  x$score <- NULL
+  y <- temp_data$score
+  time1 <- bench::system_time({
+    model <- lm(score ~ ., temp_data)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("WLS with x as a data frame", {
@@ -184,6 +333,29 @@ test_that("WLS with x as a data frame", {
   expect_equal(temp_sum, length(wls_result$residuals))
 })
 
+test_that("WLS with x as a data frame - timing", {
+  temp_data <- data.frame(
+    hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+    age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+    weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+    score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+  )
+  x <- temp_data
+  x$score <- NULL
+  y <- temp_data$score
+  time1 <- bench::system_time({
+    model <- lm(score ~ ., temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(score ~ ., temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})
+
 test_that("OLS with x as a data frame, no intercept", {
   temp_data <- data.frame(
     hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
@@ -202,6 +374,27 @@ test_that("OLS with x as a data frame, no intercept", {
   expect_equal(temp_sum, length(ols_result$fitted_values))
   temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(ols_result$residuals))
+})
+
+test_that("OLS with x as a data frame, no intercept - timing", {
+  temp_data <- data.frame(
+    hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+    age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+    weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+    score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+  )
+  x <- temp_data
+  x$score <- NULL
+  y <- temp_data$score
+  time1 <- bench::system_time({
+    model <- lm(score ~ . - 1, temp_data)
+    model$coefficients
+  })
+  time2 <- bench::system_time({
+    ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
+    ols_result$beta
+  })
+  expect_true(time2[2] < time1[2])
 })
 
 test_that("WLS with x as a data frame, no intercept", {
@@ -226,33 +419,25 @@ test_that("WLS with x as a data frame, no intercept", {
   expect_equal(temp_sum, length(wls_result$residuals))
 })
 
-
-
-# temp_data <- data.frame(
-#   hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
-#   age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
-#   weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
-#   score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
-# )
-# x <- temp_data
-# x$score <- NULL
-# y <- temp_data$score
-#
-# ## lm() function
-# system.time({
-#   model <- lm(score ~ . - 1, temp_data)
-#   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
-#   model_weighted <- lm(score ~ . - 1, temp_data, weights = wt)
-#   model_weighted$coefficients
-# })
-#
-#
-# ## get_lin_least_sq_model() function
-# bench::mark(
-#   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE),
-#   wls_result$beta
-# )
-# system.time({
-#   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
-#   wls_result$beta
-# })
+test_that("WLS with x as a data frame, no intercept - timing", {
+  temp_data <- data.frame(
+    hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+    age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+    weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+    score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+  )
+  x <- temp_data
+  x$score <- NULL
+  y <- temp_data$score
+  time1 <- bench::system_time({
+    model <- lm(score ~ . - 1, temp_data)
+    wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+    model_weighted <- lm(score ~ . - 1, temp_data, weights = wt)
+    model_weighted$coefficients
+  })
+  time2 <- bench::system_time({
+    wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+    wls_result$beta
+  })
+  expect_true(time2[2] < time1[2])
+})

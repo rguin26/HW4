@@ -157,3 +157,7 @@ To view testing model evaluation metrics:
 ```{r}
 model_stats_3$testing_model_eval_metrics
 ```
+
+## "Comparisons between `get_lin_least_sq_model` function and default `lm` function"
+
+
