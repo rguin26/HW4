@@ -19,6 +19,8 @@ The methods perform linear least squares using the following known formulas for 
   - OLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}X)^{-1}X^{T}y">
   - WLS: <img src="https://render.githubusercontent.com/render/math?math=\hat{\beta} = (X^{T}WX)^{-1}X^{T}Wy"> (more info about how the weights are calculated: https://online.stat.psu.edu/stat501/lesson/13/13.1)
 
+View the "HW4-tutorial" R-markdown vignette for more information about the accuracy of the beta coefficients produced by the `get_lin_least_sq_model` compared to the default, benchmark `lm` function. Also explained in the "HW4-tutorial" vignette is the efficiency of the `get_lin_least_sq_model` at generating the beta coefficients compared to that of the `lm` function.
+
 ## Functions:
 
 ### get_lin_least_sq_model
