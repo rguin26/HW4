@@ -3,6 +3,7 @@
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/rguin26/HW4.svg?branch=main)](https://travis-ci.com/rguin26/HW4)
 [![Codecov test coverage](https://codecov.io/gh/rguin26/HW4/branch/main/graph/badge.svg)](https://codecov.io/gh/rguin26/HW4?branch=main)
+[![R-CMD-check](https://github.com/rguin26/HW4/workflows/R-CMD-check/badge.svg)](https://github.com/rguin26/HW4/actions)
 <!-- badges: end -->
 
 ## Overview:
