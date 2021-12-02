@@ -35,16 +35,18 @@ This particular method returns a list of objects related to the linear least squ
 
 To install and load this specific GitHub hosted R package, you need to install and load the library `devtools` first. The following script should help to get this R package installed and loaded successfully:
 
-`# Install "devtools" first if it is not already installed`
-`install.packages("devtools")`
-``
-`# Once the "devtools" package has been properly installed, load it`
-`library("devtools")`
-``
-`# Install this package`
-`install_github("rguin26/HW4")`
-``
-`# Finally, load the package, and you should be able to use all the primary functions and view their documentation/help pages`
-`library(HW4)`
+```
+# Install "devtools" first if it is not already installed
+install.packages("devtools")
+
+# Once the "devtools" package has been properly installed, load it
+library("devtools")
+
+# Install this package
+install_github("rguin26/HW4")
+
+# Finally, load the package, and you should be able to use all the primary functions and view their documentation/help pages
+library(HW4)
+```
 
 ## Usage:
