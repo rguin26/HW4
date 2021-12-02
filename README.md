@@ -74,11 +74,52 @@ library(HW4)
 
 ## Usage:
 
-The primary functions of this package can be used with real data or synthetic data. Provided below are some basic examples, using randomly selected data, about how these functions can be properly used.
+The primary functions of this package can be used with real data or synthetic data. Provided below are some basic examples, using randomly selected data, about how these functions can be properly used. As mentioned before, `x` can be either a vector (for simple linear regression), a matrix, or a dataframe, and the different examples for the `get_lin_least_sq_model` function point that out. Also, you can get results for any of the possible cases:
+  - OLS
+  - WLS
+  - OLS, no intercept
+  - WLS, no intercept
+
+To view the specific features of the list object returned for each case, use the `$` symbol to access each of the different features, e.g. "beta", "fitted_values", etc.
+
+Note: all data, `x` and `y`, has to be prepared beforehand, prior to passing them into either the `get_lin_least_sq_model` or the `lin_least_squares_train_test` function.
 
 ```
+# Example 1 - get_lin_least_sq_model
+x <- sample(100, 30, replace=FALSE)
+y <- sample(100, 30, replace=TRUE)
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
 
-# Example 1
+
+# Example 2 - get_lin_least_sq_model
+x <- matrix(sample(1000, 30*5, replace=FALSE), ncol = 5)
+y <- sample(100, 30, replace=TRUE)
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+
+
+# Example 3 - get_lin_least_sq_model
+temp_data <- data.frame(
+  hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+  age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+  weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+  score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+)
+x <- temp_data
+x$score <- NULL
+y <- temp_data$score
+ols_result <- get_lin_least_sq_model(x, y)
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+
+
+# Example - lin_least_squares_train_test
 x <- data.frame(matrix(sample(100000, 200*5, replace=TRUE), ncol = 5))
 y <- sample(100, 200, replace=TRUE)
 model_stats <- lin_least_squares_train_test(x, y)
