@@ -28,9 +28,12 @@ test_that("OLS with x as a vector", {
   temp_data <- data.frame(x, y)
   model <- lm(y ~ ., temp_data)
   ols_result <- get_lin_least_sq_model(x, y)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a vector", {
@@ -41,9 +44,12 @@ test_that("WLS with x as a vector", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(y ~ ., temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
 
 test_that("OLS with x as a vector, no intercept", {
@@ -52,9 +58,12 @@ test_that("OLS with x as a vector, no intercept", {
   temp_data <- data.frame(x, y)
   model <- lm(y ~ . - 1, temp_data)
   ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a vector, no intercept", {
@@ -65,9 +74,12 @@ test_that("WLS with x as a vector, no intercept", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(y ~ . - 1, temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
 
 test_that("OLS with x as a matrix", {
@@ -76,9 +88,12 @@ test_that("OLS with x as a matrix", {
   temp_data <- data.frame(x, y)
   model <- lm(y ~ ., temp_data)
   ols_result <- get_lin_least_sq_model(x, y)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a matrix", {
@@ -89,9 +104,12 @@ test_that("WLS with x as a matrix", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(y ~ ., temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
 
 test_that("OLS with x as a matrix, no intercept", {
@@ -100,9 +118,12 @@ test_that("OLS with x as a matrix, no intercept", {
   temp_data <- data.frame(x, y)
   model <- lm(y ~ . - 1, temp_data)
   ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a matrix, no intercept", {
@@ -113,9 +134,12 @@ test_that("WLS with x as a matrix, no intercept", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(y ~ . - 1, temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
 
 test_that("OLS with x as a data frame", {
@@ -130,9 +154,12 @@ test_that("OLS with x as a data frame", {
   y <- temp_data$score
   model <- lm(score ~ ., temp_data)
   ols_result <- get_lin_least_sq_model(x, y)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a data frame", {
@@ -149,9 +176,12 @@ test_that("WLS with x as a data frame", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(score ~ ., temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
 
 test_that("OLS with x as a data frame, no intercept", {
@@ -166,9 +196,12 @@ test_that("OLS with x as a data frame, no intercept", {
   y <- temp_data$score
   model <- lm(score ~ . - 1, temp_data)
   ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
-  expect_lte(abs(model$coefficients - ols_result$beta), 0.00001)
-  expect_lte(abs(model$fitted.values - ols_result$fitted_values), 0.00001)
-  expect_lte(abs(model$residuals - ols_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model$coefficients - ols_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$beta))
+  temp_sum <- sum(abs(model$fitted.values - ols_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$fitted_values))
+  temp_sum <- sum(abs(model$residuals - ols_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(ols_result$residuals))
 })
 
 test_that("WLS with x as a data frame, no intercept", {
@@ -185,7 +218,10 @@ test_that("WLS with x as a data frame, no intercept", {
   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
   model_weighted <- lm(score ~ . - 1, temp_data, weights = wt)
   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
-  expect_lte(abs(model_weighted$coefficients - wls_result$beta), 0.00001)
-  expect_lte(abs(model_weighted$fitted.values - wls_result$fitted_values), 0.00001)
-  expect_lte(abs(model_weighted$residuals - wls_result$residuals), 0.00001)
+  temp_sum <- sum(abs(model_weighted$coefficients - wls_result$beta) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$beta))
+  temp_sum <- sum(abs(model_weighted$fitted.values - wls_result$fitted_values) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$fitted_values))
+  temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
+  expect_equal(temp_sum, length(wls_result$residuals))
 })
