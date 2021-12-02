@@ -19,7 +19,7 @@ intercept included; if it is set to FALSE, then no intercept is used}
 ordinary least squares (OLS); if it is set to TRUE, then the beta
 coefficients are calculated using weighted least squares (WLS)}
 
-\item{train_set_prop}{- set to 0.8 by default, it randomly selects this
+\item{train_set_prop}{set to 0.8 by default, it randomly selects this
 proportion of instances from x and y, of identical indexes, to use for
 training the linear least squares model, and then it uses the remaining
 instances of x and y for testing the model}

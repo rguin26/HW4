@@ -1,7 +1,7 @@
 #' @name lin_least_squares_train_test
 #' @aliases lin_least_squares_train_test
 #' @title lin_least_squares_train_test
-#' 
+#'
 #' @description
 #' Performs linear regression using ordinary least squares (OLS) or weighted
 #' least squares (WLS), with either an intercept included or not, for only a
@@ -11,9 +11,9 @@
 #' regression equation that is generated with the training set, and then it
 #' passes the testing set instances to generate predictions of that data which
 #' was previously unknown during the model training stage.
-#' 
+#'
 #' @usage lin_least_squares_train_test(x, y, intercept = TRUE, weighted = FALSE, train_set_prop = 0.8)
-#' 
+#'
 #' @param x matrix, dataframe, or vector of all predictor/predictors and
 #' its/their respective values
 #' @param y vector of target values from the matrix of known predictor values
@@ -22,13 +22,13 @@
 #' @param weighted FALSE by default, it computes the beta coefficients using
 #' ordinary least squares (OLS); if it is set to TRUE, then the beta
 #' coefficients are calculated using weighted least squares (WLS)
-#' @param train_set_prop - set to 0.8 by default, it randomly selects this
+#' @param train_set_prop set to 0.8 by default, it randomly selects this
 #' proportion of instances from x and y, of identical indexes, to use for
 #' training the linear least squares model, and then it uses the remaining
 #' instances of x and y for testing the model
-#' 
+#'
 #' @details works only with numeric data
-#' 
+#'
 #' @return A list of objects, including calculations of the estimates for the
 #' beta coefficients for each predictor, along with residuals and model
 #' evaluation metrics for both the training and testing sets
@@ -58,7 +58,7 @@
 #'   (SSE), mean squared error (MSE), root mean squared error (RMSE), mean
 #'   absolute error (MAE), r-squared, and adjusted r-squared
 #' }
-#' 
+#'
 #' @examples
 #' # Example 1
 #' x <- data.frame(matrix(sample(100000, 200*5, replace=TRUE), ncol = 5))

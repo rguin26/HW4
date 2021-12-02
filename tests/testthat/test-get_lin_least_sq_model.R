@@ -225,3 +225,34 @@ test_that("WLS with x as a data frame, no intercept", {
   temp_sum <- sum(abs(model_weighted$residuals - wls_result$residuals) < 0.00001)
   expect_equal(temp_sum, length(wls_result$residuals))
 })
+
+
+
+# temp_data <- data.frame(
+#   hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
+#   age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
+#   weight=c(23, 12, 31, 24, 56, 23, 12, 23, 34, 35, 36, 14, 23, 11, 13, 56),
+#   score=c(48, 78, 72, 70, 66, 92, 93, 75, 75, 80, 95, 97, 90, 96, 99, 99)
+# )
+# x <- temp_data
+# x$score <- NULL
+# y <- temp_data$score
+#
+# ## lm() function
+# system.time({
+#   model <- lm(score ~ . - 1, temp_data)
+#   wt <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+#   model_weighted <- lm(score ~ . - 1, temp_data, weights = wt)
+#   model_weighted$coefficients
+# })
+#
+#
+# ## get_lin_least_sq_model() function
+# bench::mark(
+#   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE),
+#   wls_result$beta
+# )
+# system.time({
+#   wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+#   wls_result$beta
+# })
