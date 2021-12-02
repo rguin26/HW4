@@ -12,6 +12,8 @@ This package provides functions for linear least squares regression. It performs
   - `get_lin_least_sq_model`
   - `lin_least_squares_train_test`
 
+In general, the method of OLS assumes that there is constant variance in the errors (which is called **homoscedasticity**). The method of WLS can be used when the OLS assumption of constant variance in the errors is violated (which is called **heteroscedasticity**). WLS is particularly ideal for use when there exist outliers in the data. The functions in this package allow a user to specify whether he/she wants to generate a linear least squares model using OLS or WLS. Hence WLS is performed when specified.
+
 The functions only work with numeric data, and error warnings are thrown if any non-numeric data is detected. Errors are also thrown if the size of vectors of predictor variables do not match the size of the vector of target values.
 
 The methods perform linear least squares using the following known formulas for calculating the Beta coefficients of each method:
@@ -56,7 +58,7 @@ The list object returned by this method includes calculations of the estimates f
 
 ## Installation:
 
-To install and load this specific GitHub R package, you need to install and load the library `devtools` first. The following script should help to get this R package installed and loaded successfully:
+To install and load this specific GitHub R package, library `devtools` needs to be installed first. The following script should help to get this R package installed and loaded successfully:
 
 ```
 # Install "devtools" first if it is not already installed
@@ -68,13 +70,13 @@ library("devtools")
 # Install this package
 install_github("rguin26/HW4")
 
-# Finally, load the package, and you should be able to use all the primary functions and view their documentation/help pages
+# Finally, load the package, and one should be able to use all the primary functions and view their documentation/help pages
 library(HW4)
 ```
 
 ## Usage:
 
-The primary functions of this package can be used with real data or synthetic data. Provided below are some basic examples, using randomly selected data, about how these functions can be properly used. As mentioned before, `x` can be either a vector (for simple linear regression), a matrix, or a dataframe, and the different examples for the `get_lin_least_sq_model` function point that out. Also, you can get results for any of the possible cases:
+The primary functions of this package can be used with real data or synthetic data. Provided below are some basic examples, using randomly selected data, about how these functions can be properly used. As mentioned before, `x` can be either a vector (for simple linear regression), a matrix, or a dataframe, and the different examples for the `get_lin_least_sq_model` function point that out. Also, one can get results for any of the possible cases:
   - OLS
   - WLS
   - OLS, no intercept
