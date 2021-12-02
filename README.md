@@ -21,3 +21,11 @@ The `get_lin_least_sq_model` method is used in the following way: `get_lin_least
   - `y` is a vector of target values from the matrix of known predictor values
   - `intercept` is TRUE by default, and it computes the beta coefficients with an intercept included; if it is set to FALSE, then no intercept is used
   - `weighted` is FALSE by default, and it computes the beta coefficients using ordinary least squares (OLS); if it is set to TRUE, then the beta coefficients are calculated using weighted least squares (WLS)
+
+This particular method returns a list of objects related to the linear least squares method used with the data passed in to it. The list includes calculations of the estimates for the beta coefficients for each predictor, along with residuals and model evaluation metrics.
+  - `beta`: a vector of beta coefficients, with values corresponding to their respective column in `x`, and starting with (intercept) if `intercept = TRUE`
+  - `fitted_values`: vector consisting of the fitted values of the data, `x`, used to build the model, calculated simply as the model's prediction value for each instance in `x`
+  - `residuals`: vector consisting of the residuals of each instance in `x`, calculated as the fitted value minus the actual value for each instance in `x`
+  - `model_eval_metrics`: vector consisting of evaluation metrics of the model, including sum of squared errors (SSE), mean squared error (MSE), root mean squared error (RMSE), mean absolute error (MAE), r-squared, and adjusted r-squared
+
+
