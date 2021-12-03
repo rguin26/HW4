@@ -299,11 +299,11 @@ This is perhaps initially a little more difficult to compare, but it is more or 
 
 Now that we discussed the accuracies of the the different features between the `get_lin_least_sq_model` and the default `lm` function, including the beta coefficients, the fitted values, the residuals, plus the R-squared and adjusted R-squared values, let's evaluate how efficient the two different functions are.
 
-The first thing to do is load the "bench" library, which can be installed from the GitHub repository "r-lib/bench".
+The first thing to do is load the "bench" library.
 
 ```{r}
 ## If `bench` library is not yet installed, run the command below to install it
-# devtools::install_github("r-lib/bench")
+# install.packages("bench")
 library(bench)
 ```
 
@@ -474,7 +474,7 @@ The following commented-out script could show efficiencies between the two imple
 # ## vector of residuals.
 # 
 # ## If `bench` library is not yet installed, uncomment and run the command below to install it
-# # devtools::install_github("r-lib/bench")
+# # install.packages("bench")
 # library(bench)
 # 
 # #############

@@ -37,8 +37,6 @@ test_that("OLS with x as a vector", {
 })
 
 test_that("OLS with x as a vector, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- sample(100, 30, replace=FALSE)
   y <- sample(100, 30, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -70,8 +68,6 @@ test_that("WLS with x as a vector", {
 })
 
 test_that("WLS with x as a vector, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- sample(300, 50, replace=FALSE)
   y <- sample(900, 50, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -103,8 +99,6 @@ test_that("OLS with x as a vector, no intercept", {
 })
 
 test_that("OLS with x as a vector, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- sample(200, 60, replace=FALSE)
   y <- sample(400, 60, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -136,8 +130,6 @@ test_that("WLS with x as a vector, no intercept", {
 })
 
 test_that("WLS with x as a vector, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- sample(500, 100, replace=FALSE)
   y <- sample(800, 100, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -169,8 +161,6 @@ test_that("OLS with x as a matrix", {
 })
 
 test_that("OLS with x as a matrix - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- matrix(sample(1000, 30*5, replace=FALSE), ncol = 5)
   y <- sample(100, 30, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -202,8 +192,6 @@ test_that("WLS with x as a matrix", {
 })
 
 test_that("WLS with x as a matrix - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- matrix(sample(1000, 60*5, replace=FALSE), ncol = 5)
   y <- sample(400, 60, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -235,8 +223,6 @@ test_that("OLS with x as a matrix, no intercept", {
 })
 
 test_that("OLS with x as a matrix, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- matrix(sample(1000, 60*5, replace=FALSE), ncol = 5)
   y <- sample(400, 60, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -268,8 +254,6 @@ test_that("WLS with x as a matrix, no intercept", {
 })
 
 test_that("WLS with x as a matrix, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   x <- matrix(sample(1000, 100*3, replace=FALSE), ncol = 3)
   y <- sample(800, 100, replace=TRUE)
   temp_data <- data.frame(x, y)
@@ -307,8 +291,6 @@ test_that("OLS with x as a data frame", {
 })
 
 test_that("OLS with x as a data frame - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   temp_data <- data.frame(
     hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
     age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
@@ -352,8 +334,6 @@ test_that("WLS with x as a data frame", {
 })
 
 test_that("WLS with x as a data frame - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   temp_data <- data.frame(
     hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
     age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
@@ -397,8 +377,6 @@ test_that("OLS with x as a data frame, no intercept", {
 })
 
 test_that("OLS with x as a data frame, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   temp_data <- data.frame(
     hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
     age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
@@ -442,8 +420,6 @@ test_that("WLS with x as a data frame, no intercept", {
 })
 
 test_that("WLS with x as a data frame, no intercept - timing", {
-  # devtools::install_github("r-lib/bench")
-  # library(bench)
   temp_data <- data.frame(
     hours=c(1, 1, 2, 2, 2, 3, 4, 4, 4, 5, 5, 5, 6, 6, 7, 8),
     age=c(3, 6, 7, 2, 4, 5, 6, 3, 4, 5, 2, 2, 4, 5, 9, 8),
