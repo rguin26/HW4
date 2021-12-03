@@ -13,6 +13,8 @@
 #'
 #' @usage get_lin_least_sq_model(x, y, intercept = TRUE, weighted = FALSE)
 #'
+#' @import Rcpp
+#'
 #' @param x matrix, dataframe, or vector of all predictor/predictors and
 #' its/their respective values
 #' @param y vector of target values from the matrix of known predictor values

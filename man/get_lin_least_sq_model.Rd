@@ -83,6 +83,4 @@ wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
 ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
 wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
 
-#'@export
-
 }

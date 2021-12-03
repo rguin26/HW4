@@ -2,5 +2,6 @@
 
 export(get_lin_least_sq_model)
 export(lin_least_squares_train_test)
+import(Rcpp)
 importFrom(Rcpp,sourceCpp)
 useDynLib(HW4, .registration = TRUE)

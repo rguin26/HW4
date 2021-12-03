@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 ## Run the command below to install the package first if it needs to be installed
-#> devtools::install_github("rguin26/HW4")
+# devtools::install_github("rguin26/HW4")
 library(HW4)
 ```
 

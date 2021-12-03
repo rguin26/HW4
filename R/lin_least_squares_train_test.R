@@ -14,6 +14,8 @@
 #'
 #' @usage lin_least_squares_train_test(x, y, intercept = TRUE, weighted = FALSE, train_set_prop = 0.8)
 #'
+#' @import Rcpp
+#'
 #' @param x matrix, dataframe, or vector of all predictor/predictors and
 #' its/their respective values
 #' @param y vector of target values from the matrix of known predictor values
