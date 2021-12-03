@@ -14,6 +14,7 @@
 #' @usage get_lin_least_sq_model(x, y, intercept = TRUE, weighted = FALSE)
 #'
 #' @import Rcpp
+#' @import bench
 #'
 #' @param x matrix, dataframe, or vector of all predictor/predictors and
 #' its/their respective values
