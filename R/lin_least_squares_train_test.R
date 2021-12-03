@@ -67,6 +67,9 @@
 #' model_stats$beta
 #' model_stats$training_model_eval_metrics
 #' model_stats$testing_model_eval_metrics
+#'
+#' @export
+#'
 
 ## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
 # install.packages("Rcpp")

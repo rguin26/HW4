@@ -76,4 +76,5 @@ model_stats <- lin_least_squares_train_test(x, y)
 model_stats$beta
 model_stats$training_model_eval_metrics
 model_stats$testing_model_eval_metrics
+
 }
