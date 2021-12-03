@@ -134,12 +134,20 @@ get_fitted_values <- function(beta, x) {
   return(fitted_values)
 }
 
+# Initial C++ (Rcpp) attempt at creating a function that returns a vector of residuals
 cppFunction('
-  NumericVector get_residuals(const NumericVector fitted_values, const NumericVector y){
+  NumericVector get_residuals_cpp(const NumericVector fitted_values, const NumericVector y){
     if (fitted_values.length() != y.length()) stop ("vectors must be of same length");
     return y - fitted_values;
   }
 ')
+
+get_residuals <- function(fitted_values, y) {
+  if (length(fitted_values) != length(y)) {
+    stop ("vectors must be of same length")
+  }
+  return(y - fitted_values)
+}
 
 get_sse_and_r_squared <- function(residuals, y, num_features, n, weights = NULL) {
   r_squared <- 0
