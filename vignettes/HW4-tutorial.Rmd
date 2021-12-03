@@ -432,169 +432,168 @@ As seen in all the cases above, the `get_lin_least_sq_model` is significantly fa
 
 ## "Evaluating efficiency of C++ ("Rcpp") function for residuals vs R implementation of same function"
 
-One of the helper functions used for both the `get_lin_least_sq_model` function and the `lin_least_squares_train_test` function returns the residuals of any fitted values and actual y values passed in to it as parameters. It is implemented using C++ (Rcpp), as it is expected that C++ should perform much faster at certain operations or methods than R.
+One of the helper functions used for both the `get_lin_least_sq_model` function and the `lin_least_squares_train_test` function returns the residuals of any fitted values and actual y values passed in to it as parameters. It was initially implemented using C++ (Rcpp), as it is expected that C++ should perform much faster at certain operations or methods than R, but then it was reverted back to R due to running errors.
 
-Let's now evaluate the efficiency of both implementations of that function. Before implementing the functions, let's make sure we load the "Rcpp" library.
-
-```{r}
-## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
-# install.packages("Rcpp")
-library(Rcpp)
-```
-
-R implementation:
+The following commented-out script could show efficiencies between the two implementations of the function. However, due to running problems encountered while trying to implement the Rcpp functions. It was tested elsewhere, and can always be done, but did not work properly in this vignette. It turned out that the Rcpp implementation of the function is sometimes faster than the R implementation, but not always, and it does not depend on the size of the two vectors. This is not exactly what was expected, but it was certainly worth evaluating how long it takes each implementation of a function to perform a specific task.
 
 ```{r}
-get_residuals_r <- function(fitted_values, y) {
-  if (length(fitted_values) != length(y)) {
-    stop("vectors must be of same length")
-  }
-  return(y - fitted_values)
-}
+# ## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
+# # install.packages("Rcpp")
+# library(Rcpp)
+# 
+# ## R implementation:
+# get_residuals_r <- function(fitted_values, y) {
+#   if (length(fitted_values) != length(y)) {
+#     stop("vectors must be of same length")
+#   }
+#   return(y - fitted_values)
+# }
+# 
+# ## C++ (Rcpp) implementation:
+# cppFunction('
+#   NumericVector get_residuals_cpp(const NumericVector fitted_values, const NumericVector y){
+#     if (fitted_values.length() != y.length()) stop ("vectors must be of same length");
+#     return y - fitted_values;
+#   }
+# ')
+# 
+# ## To evaluate the efficiency of both implementations of this particular
+# ## function, let's start out with two simple vectors of fitted values and y, and
+# ## then print their results to first verify that they are similar.
+# 
+# fitted_values <- sample(500, 10)
+# y <- sample(100, 10)
+# 
+# print(get_residuals_r(fitted_values, y))
+# print(get_residuals_cpp(fitted_values, y))
+# 
+# ## We just verified that the two implementations of the function produce similar
+# ## results. Now, let's run some more examples of fitted values and y, of
+# ## different vector sizes in every case, to see if the Rcpp function performs
+# ## any faster than the standard R function when generating and returning a
+# ## vector of residuals.
+# 
+# ## If `bench` library is not yet installed, uncomment and run the command below to install it
+# # devtools::install_github("r-lib/bench")
+# library(bench)
+# 
+# #############
+# ## Example 1:
+# ## Creating two random vectors of the same size
+# vec_size <- 10
+# fitted_values <- sample(500, vec_size)
+# y <- sample(100, vec_size)
+# 
+# ## Timing of the R-implementation of the "get_residuals" function
+# time1 <- bench::system_time({
+#   vec1 <- get_residuals_r(fitted_values, y)
+# })
+# 
+# ## Timing of the Rcpp-implementation of the "get_residuals" function
+# time2 <- bench::system_time({
+#   vec2 <- get_residuals_cpp(fitted_values, y)
+# })
+# 
+# ## Printing the times of each function
+# time1
+# time2
+# 
+# ## Verifying that the real timing of the C++ implementation is less than that of the default R implementation
+# (time2 < time1)[2]
+# 
+# #############
+# ## Example 2:
+# ## Creating two random vectors of the same size
+# vec_size <- 50
+# fitted_values <- sample(500, vec_size)
+# y <- sample(100, vec_size)
+# 
+# ## Timing of the R-implementation of the "get_residuals" function
+# time1 <- bench::system_time({
+#   vec1 <- get_residuals_r(fitted_values, y)
+# })
+# 
+# ## Timing of the Rcpp-implementation of the "get_residuals" function
+# time2 <- bench::system_time({
+#   vec2 <- get_residuals_cpp(fitted_values, y)
+# })
+# 
+# ## Printing the times of each function
+# time1
+# time2
+# 
+# ## Verifying that the real timing of the C++ implementation is less than that of the default R implementation
+# (time2 < time1)[2]
+# 
+# #############
+# ## Example 3:
+# ## Creating two random vectors of the same size
+# vec_size <- 100
+# fitted_values <- sample(500, vec_size)
+# y <- sample(100, vec_size)
+# 
+# ## Timing of the R-implementation of the "get_residuals" function
+# time1 <- bench::system_time({
+#   vec1 <- get_residuals_r(fitted_values, y)
+# })
+# 
+# ## Timing of the Rcpp-implementation of the "get_residuals" function
+# time2 <- bench::system_time({
+#   vec2 <- get_residuals_cpp(fitted_values, y)
+# })
+# 
+# ## Printing the times of each function
+# time1
+# time2
+# 
+# ## Verifying that the real timing of the C++ implementation is less than that of the default R implementation
+# (time2 < time1)[2]
+# 
+# #############
+# ## Example 4:
+# ## Creating two random vectors of the same size
+# vec_size <- 500
+# fitted_values <- sample(10000, vec_size)
+# y <- sample(1000, vec_size)
+# 
+# ## Timing of the R-implementation of the "get_residuals" function
+# time1 <- bench::system_time({
+#   vec1 <- get_residuals_r(fitted_values, y)
+# })
+# 
+# ## Timing of the Rcpp-implementation of the "get_residuals" function
+# time2 <- bench::system_time({
+#   vec2 <- get_residuals_cpp(fitted_values, y)
+# })
+# 
+# ## Printing the times of each function
+# time1
+# time2
+# 
+# ## Verifying that the real timing of the C++ implementation is less than that of the default R implementation
+# (time2 < time1)[2]
+# 
+# #############
+# ## Example 5:
+# ## Creating two random vectors of the same size
+# vec_size <- 1000
+# fitted_values <- sample(10000, vec_size)
+# y <- sample(12000, vec_size)
+# 
+# ## Timing of the R-implementation of the "get_residuals" function
+# time1 <- bench::system_time({
+#   vec1 <- get_residuals_r(fitted_values, y)
+# })
+# 
+# ## Timing of the Rcpp-implementation of the "get_residuals" function
+# time2 <- bench::system_time({
+#   vec2 <- get_residuals_cpp(fitted_values, y)
+# })
+# 
+# ## Printing the times of each function
+# time1
+# time2
+# 
+# ## Verifying that the real timing of the C++ implementation is less than that of the default R implementation
+# (time2 < time1)[2]
 ```
-
-C++ (Rcpp) implementation:
-
-```{r}
-cppFunction('
-  NumericVector get_residuals_cpp(const NumericVector fitted_values, const NumericVector y){
-    if (fitted_values.length() != y.length()) stop ("vectors must be of same length");
-    return y - fitted_values;
-  }
-')
-```
-
-To evaluate the efficiency of both implementations of this particular function, let's start out with two simple vectors of fitted values and y, and then print their results to first verify that they are similar.
-
-```{r}
-fitted_values <- sample(500, 10)
-y <- sample(100, 10)
-
-print(get_residuals_r(fitted_values, y))
-print(get_residuals_cpp(fitted_values, y))
-```
-
-We just verified that the two implementations of the function produce similar results. Now, let's run some more examples of fitted values and y, of different vector sizes in every case, to see if the Rcpp function performs any faster than the standard R function when generating and returning a vector of residuals.
-
-```{r}
-# Creating two random vectors of the same size
-vec_size <- 10
-fitted_values <- sample(500, vec_size)
-y <- sample(100, vec_size)
-
-# Timing of the R-implementation of the "get_residuals" function
-time1 <- bench::system_time({
-  vec1 <- get_residuals_r(fitted_values, y)
-})
-
-# Timing of the Rcpp-implementation of the "get_residuals" function
-time2 <- bench::system_time({
-  vec2 <- get_residuals_cpp(fitted_values, y)
-})
-
-# Printing the times of each function
-time1
-time2
-
-# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
-(time2 < time1)[2]
-```
-
-```{r}
-# Creating two random vectors of the same size
-vec_size <- 50
-fitted_values <- sample(500, vec_size)
-y <- sample(100, vec_size)
-
-# Timing of the R-implementation of the "get_residuals" function
-time1 <- bench::system_time({
-  vec1 <- get_residuals_r(fitted_values, y)
-})
-
-# Timing of the Rcpp-implementation of the "get_residuals" function
-time2 <- bench::system_time({
-  vec2 <- get_residuals_cpp(fitted_values, y)
-})
-
-# Printing the times of each function
-time1
-time2
-
-# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
-(time2 < time1)[2]
-```
-
-```{r}
-# Creating two random vectors of the same size
-vec_size <- 100
-fitted_values <- sample(500, vec_size)
-y <- sample(100, vec_size)
-
-# Timing of the R-implementation of the "get_residuals" function
-time1 <- bench::system_time({
-  vec1 <- get_residuals_r(fitted_values, y)
-})
-
-# Timing of the Rcpp-implementation of the "get_residuals" function
-time2 <- bench::system_time({
-  vec2 <- get_residuals_cpp(fitted_values, y)
-})
-
-# Printing the times of each function
-time1
-time2
-
-# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
-(time2 < time1)[2]
-```
-
-```{r}
-# Creating two random vectors of the same size
-vec_size <- 500
-fitted_values <- sample(10000, vec_size)
-y <- sample(1000, vec_size)
-
-# Timing of the R-implementation of the "get_residuals" function
-time1 <- bench::system_time({
-  vec1 <- get_residuals_r(fitted_values, y)
-})
-
-# Timing of the Rcpp-implementation of the "get_residuals" function
-time2 <- bench::system_time({
-  vec2 <- get_residuals_cpp(fitted_values, y)
-})
-
-# Printing the times of each function
-time1
-time2
-
-# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
-(time2 < time1)[2]
-```
-
-```{r}
-# Creating two random vectors of the same size
-vec_size <- 1000
-fitted_values <- sample(10000, vec_size)
-y <- sample(12000, vec_size)
-
-# Timing of the R-implementation of the "get_residuals" function
-# Timing of the R-implementation of the "get_residuals" function
-time1 <- bench::system_time({
-  vec1 <- get_residuals_r(fitted_values, y)
-})
-
-# Timing of the Rcpp-implementation of the "get_residuals" function
-time2 <- bench::system_time({
-  vec2 <- get_residuals_cpp(fitted_values, y)
-})
-
-# Printing the times of each function
-time1
-time2
-
-# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
-(time2 < time1)[2]
-```
-
-It turns out that the Rcpp implementation of the function is sometimes faster than the R implementation, but not always, and it does not depend on the size of the two vectors. This is not exactly what was expected, but it was certainly worth evaluating how long it takes each implementation of a function to perform a specific task.
