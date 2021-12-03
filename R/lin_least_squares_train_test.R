@@ -68,8 +68,12 @@
 #' model_stats$training_model_eval_metrics
 #' model_stats$testing_model_eval_metrics
 
+## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
+# install.packages("Rcpp")
 library(Rcpp)
 
+####################
+# Primary function #
 lin_least_squares_train_test <- function(x, y, intercept = TRUE, weighted = FALSE, train_set_prop = 0.8) {
   x <- preprocess_data(x)
   if (is.numeric(y) == FALSE) {
@@ -107,6 +111,8 @@ lin_least_squares_train_test <- function(x, y, intercept = TRUE, weighted = FALS
               "testing_model_eval_metrics" = testing_model_eval_metrics))
 }
 
+####################
+# Helper functions #
 preprocess_data <- function(x) {
   if (is.matrix(x) == FALSE) {
     if (is.data.frame(x) == TRUE) {

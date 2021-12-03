@@ -75,8 +75,12 @@
 #' ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
 #' wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
 
+## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
+# install.packages("Rcpp")
 library(Rcpp)
 
+####################
+# Primary function #
 get_lin_least_sq_model <- function(x, y, intercept = TRUE, weighted = FALSE) {
   x <- preprocess_data(x)
   if (is.numeric(y) == FALSE) {
@@ -97,6 +101,8 @@ get_lin_least_sq_model <- function(x, y, intercept = TRUE, weighted = FALSE) {
   }
 }
 
+####################
+# Helper functions #
 preprocess_data <- function(x) {
   if (is.matrix(x) == FALSE) {
     if (is.data.frame(x) == TRUE) {

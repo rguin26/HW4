@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+## Run the command below to install the package first if it needs to be installed
+# devtools::install_github("rguin26/HW4")
 library(HW4)
 ```
 
@@ -158,6 +160,441 @@ To view testing model evaluation metrics:
 model_stats_3$testing_model_eval_metrics
 ```
 
-## "Comparisons between `get_lin_least_sq_model` function and default `lm` function"
+## "Comparisons of features between the `get_lin_least_sq_model` function and default `lm` function"
 
+Here are some comparisons between the results produced by the `get_lin_least_sq_model` function and default `lm` function. This time, the "mtcars" dataset will be used.
 
+To start off, the data is prepared according to the following.
+
+```{r}
+x <- mtcars[, c("cyl", "disp", "hp", "drat", "wt", "qsec", "gear", "carb")]
+y <- mtcars$mpg
+```
+
+Now, let's create models/objects based on each case: OLS, WLS, OLS with no intercept, and WLS with no intercept.
+
+OLS:
+
+```{r}
+ols_result <- get_lin_least_sq_model(x, y)
+model <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars)
+```
+
+WLS:
+
+```{r}
+wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+
+model <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars)
+wts <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+model_weighted <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars, weights = wts)
+```
+
+OLS with no intercept:
+
+```{r}
+ols_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE)
+model_no_intercept <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars)
+```
+
+WLS with no intercept:
+
+```{r}
+wls_result_no_intercept <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+model_no_intercept <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars)
+wts <- 1 / lm(abs(model_no_intercept$residuals) ~ model_no_intercept$fitted.values)$fitted.values^2
+model_weighted_no_intercept <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars, weights = wts)
+```
+
+Viewing the beta coefficients.
+
+OLS:
+
+```{r}
+ols_result$beta
+model$coefficients
+```
+
+WLS:
+
+```{r}
+wls_result$beta
+model_weighted$coefficients
+```
+
+OLS with no intercept:
+
+```{r}
+ols_result_no_intercept$beta
+model_no_intercept$coefficients
+```
+
+WLS with no intercept:
+
+```{r}
+wls_result_no_intercept$beta
+model_weighted_no_intercept$coefficients
+```
+
+As shown, the beta coefficients are just about equal to each other. However, if you compare them using the `==` operator, then it does not match the expectations.
+
+```{r}
+ols_result$beta == model$coefficients
+wls_result$beta == model_weighted$coefficients
+ols_result_no_intercept$beta == model_no_intercept$coefficients
+wls_result_no_intercept$beta == model_weighted_no_intercept$coefficients
+```
+
+The beta coefficients from both functions are quite similar, but not exactly equal. They are very similar in value, as seen in the outputs, so they are not significantly different. With a threshold of 0.00001, it is guaranteed that their differences are not significant.
+
+```{r}
+abs(ols_result$beta == model$coefficients) < 0.00001
+abs(wls_result$beta == model_weighted$coefficients) < 0.00001
+abs(ols_result_no_intercept$beta == model_no_intercept$coefficients) < 0.00001
+abs(wls_result_no_intercept$beta == model_weighted_no_intercept$coefficients) < 0.00001
+```
+
+Now, let's evaluate the fitted values and residuals for one of the specific cases instead of all 4. Let's do the WLS model.
+
+WLS fitted values:
+
+```{r}
+unname(wls_result$fitted_values)
+unname(model_weighted$fitted.values)
+```
+
+```{r}
+# Direct equality
+unname(wls_result$fitted_values == model_weighted$fitted.values)
+# Precise comparison to the 0.00001 threshold
+unname(abs(wls_result$fitted_values- model_weighted$fitted.values) < 0.00001)
+```
+
+WLS residuals:
+
+```{r}
+unname(wls_result$residuals)
+unname(model_weighted$residuals)
+```
+
+```{r}
+# Direct equality
+unname(wls_result$residuals == model_weighted$residuals)
+# Precise comparison to the 0.00001 threshold
+unname(abs(wls_result$residuals - model_weighted$residuals) < 0.00001)
+```
+
+Once again, you notice that the direct equality fails between the results of each function, but are really precise, and their absolute differences are less than 0.00001, an appropriate threshold for minimizing errors. This is consistent for all the other cases.
+
+Just for one more comparison, let's quickly view the error metrics of the WLS object, and compare the R-squared and adjusted R-squared values.
+
+```{r}
+wls_result$model_eval_metrics
+summary(model_weighted)
+```
+
+This is perhaps initially a little more difficult to compare, but it is more or less clear how the results produced by the summary of the `model_weighted` object, produced by the `lm` function, are quite precise to 4 decimal places.
+
+## Efficiency of `get_lin_least_sq_model` function and default `lm` function"
+
+Now that we discussed the accuracies of the the different features between the `get_lin_least_sq_model` and the default `lm` function, including the beta coefficients, the fitted values, the residuals, plus the R-squared and adjusted R-squared values, let's evaluate how efficient the two different functions are.
+
+The first thing to do is load the "bench" library, which can be installed from the GitHub repository "r-lib/bench".
+
+```{r}
+## If `bench` library is not yet installed, run the command below to install it
+# devtools::install_github("r-lib/bench")
+library(bench)
+```
+
+Let's continue to work with the same x and y data from the "mtcars" dataset. To start, let's recreate the data just to be safe in case something was changed from before.
+
+```{r}
+x <- mtcars[, c("cyl", "disp", "hp", "drat", "wt", "qsec", "gear", "carb")]
+y <- mtcars$mpg
+```
+
+Let's create the models/objects with each function for every case again, and this time, let's time how long it takes to create the object and display the beta coefficients, fitted values, and residuals.
+
+OLS:
+
+```{r}
+# Timing of the default "lm" function
+time1 <- bench::system_time({
+  model <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars)
+  model$coefficients
+  unname(model$fitted.values)
+  unname(model$residuals)
+})
+
+# Timing of the "get_lin_least_sq_model" function
+time2 <- bench::system_time({
+  ols_result <- get_lin_least_sq_model(x, y)
+  ols_result$beta
+  unname(ols_result$fitted_values)
+  unname(ols_result$residuals)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+WLS:
+
+```{r}
+# Timing of the default "lm" function
+time1 <- bench::system_time({
+  model <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars)
+  wts <- 1 / lm(abs(model$residuals) ~ model$fitted.values)$fitted.values^2
+  model_weighted <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb, data = mtcars, weights = wts)
+  model_weighted$coefficients
+  unname(model_weighted$fitted.values)
+  unname(model_weighted$residuals)
+})
+
+# Timing of the "get_lin_least_sq_model" function
+time2 <- bench::system_time({
+  wls_result <- get_lin_least_sq_model(x, y, weighted = TRUE)
+  wls_result$beta
+  unname(wls_result$fitted_values)
+  unname(wls_result$residuals)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+OLS with no intercept:
+
+```{r}
+# Timing of the default "lm" function
+time1 <- bench::system_time({
+  model <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars)
+  model$coefficients
+  unname(model$fitted.values)
+  unname(model$residuals)
+})
+
+# Timing of the "get_lin_least_sq_model" function
+time2 <- bench::system_time({
+  ols_result <- get_lin_least_sq_model(x, y, intercept = FALSE)
+  ols_result$beta
+  unname(ols_result$fitted_values)
+  unname(ols_result$residuals)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+WLS with no intercept:
+
+```{r}
+# Timing of the default "lm" function
+time1 <- bench::system_time({
+  model_no_intercept <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars)
+  wts <- 1 / lm(abs(model_no_intercept$residuals) ~ model_no_intercept$fitted.values)$fitted.values^2
+  model_weighted_no_intercept <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec + gear + carb - 1, data = mtcars, weights = wts)
+  model_weighted_no_intercept$coefficients
+  unname(model_weighted_no_intercept$fitted.values)
+  unname(model_weighted_no_intercept$residuals)
+})
+
+# Timing of the "get_lin_least_sq_model" function
+time2 <- bench::system_time({
+  wls_result <- get_lin_least_sq_model(x, y, intercept = FALSE, weighted = TRUE)
+  wls_result$beta
+  unname(wls_result$fitted_values)
+  unname(wls_result$residuals)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+As seen in all the cases above, the `get_lin_least_sq_model` is significantly faster than the default `lm` function. This proves that the `get_lin_least_sq_model` function from this particular library, "HW4", is really efficient at computing beta coefficients, fitted values, and residuals of any linear least squares method, including OLS, WLS, OLS with no intercept, and WLS with no intercept.
+
+## "Evaluating efficiency of C++ ("Rcpp") function for residuals vs R implementation of same function"
+
+One of the helper functions used for both the `get_lin_least_sq_model` function and the `lin_least_squares_train_test` function returns the residuals of any fitted values and actual y values passed in to it as parameters. It is implemented using C++ (Rcpp), as it is expected that C++ should perform much faster at certain operations or methods than R.
+
+Let's now evaluate the efficiency of both implementations of that function. Before implementing the functions, let's make sure we load the "Rcpp" library.
+
+```{r}
+## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
+# install.packages("Rcpp")
+library(Rcpp)
+```
+
+R implementation:
+
+```{r}
+get_residuals_r <- function(fitted_values, y) {
+  if (length(fitted_values) != length(y)) {
+    stop("vectors must be of same length")
+  }
+  return(y - fitted_values)
+}
+```
+
+C++ (Rcpp) implementation:
+
+```{r}
+cppFunction('
+  NumericVector get_residuals_cpp(const NumericVector fitted_values, const NumericVector y){
+    if (fitted_values.length() != y.length()) stop ("vectors must be of same length");
+    return y - fitted_values;
+  }
+')
+```
+
+To evaluate the efficiency of both implementations of this particular function, let's start out with two simple vectors of fitted values and y, and then print their results to first verify that they are similar.
+
+```{r}
+fitted_values <- sample(500, 10)
+y <- sample(100, 10)
+
+print(get_residuals_r(fitted_values, y))
+print(get_residuals_cpp(fitted_values, y))
+```
+
+We just verified that the two implementations of the function produce similar results. Now, let's run some more examples of fitted values and y, of different vector sizes in every case, to see if the Rcpp function performs any faster than the standard R function when generating and returning a vector of residuals.
+
+```{r}
+# Creating two random vectors of the same size
+vec_size <- 10
+fitted_values <- sample(500, vec_size)
+y <- sample(100, vec_size)
+
+# Timing of the R-implementation of the "get_residuals" function
+time1 <- bench::system_time({
+  vec1 <- get_residuals_r(fitted_values, y)
+})
+
+# Timing of the Rcpp-implementation of the "get_residuals" function
+time2 <- bench::system_time({
+  vec2 <- get_residuals_cpp(fitted_values, y)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+```{r}
+# Creating two random vectors of the same size
+vec_size <- 50
+fitted_values <- sample(500, vec_size)
+y <- sample(100, vec_size)
+
+# Timing of the R-implementation of the "get_residuals" function
+time1 <- bench::system_time({
+  vec1 <- get_residuals_r(fitted_values, y)
+})
+
+# Timing of the Rcpp-implementation of the "get_residuals" function
+time2 <- bench::system_time({
+  vec2 <- get_residuals_cpp(fitted_values, y)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+```{r}
+# Creating two random vectors of the same size
+vec_size <- 100
+fitted_values <- sample(500, vec_size)
+y <- sample(100, vec_size)
+
+# Timing of the R-implementation of the "get_residuals" function
+time1 <- bench::system_time({
+  vec1 <- get_residuals_r(fitted_values, y)
+})
+
+# Timing of the Rcpp-implementation of the "get_residuals" function
+time2 <- bench::system_time({
+  vec2 <- get_residuals_cpp(fitted_values, y)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+```{r}
+# Creating two random vectors of the same size
+vec_size <- 500
+fitted_values <- sample(10000, vec_size)
+y <- sample(1000, vec_size)
+
+# Timing of the R-implementation of the "get_residuals" function
+time1 <- bench::system_time({
+  vec1 <- get_residuals_r(fitted_values, y)
+})
+
+# Timing of the Rcpp-implementation of the "get_residuals" function
+time2 <- bench::system_time({
+  vec2 <- get_residuals_cpp(fitted_values, y)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+```{r}
+# Creating two random vectors of the same size
+vec_size <- 1000
+fitted_values <- sample(10000, vec_size)
+y <- sample(12000, vec_size)
+
+# Timing of the R-implementation of the "get_residuals" function
+# Timing of the R-implementation of the "get_residuals" function
+time1 <- bench::system_time({
+  vec1 <- get_residuals_r(fitted_values, y)
+})
+
+# Timing of the Rcpp-implementation of the "get_residuals" function
+time2 <- bench::system_time({
+  vec2 <- get_residuals_cpp(fitted_values, y)
+})
+
+# Printing the times of each function
+time1
+time2
+
+# Verifying that the real timing of the "get_lin_least_sq_model" function is less than that of the default "lm" function
+(time2 < time1)[2]
+```
+
+It turns out that the Rcpp implementation of the function is sometimes faster than the R implementation, but not always, and it does not depend on the size of the two vectors. This is not exactly what was expected, but it was certainly worth evaluating how long it takes each implementation of a function to perform a specific task.
