@@ -27,7 +27,7 @@ In order to make sure the vignette works properly, the libraries "Rcpp" and "ben
 install.packages("Rcpp")
 library(Rcpp)
 
-devtools::install_github("r-lib/bench")
+install.packages("bench")
 library(bench)
 ```
 
