@@ -59,6 +59,8 @@
 #'   absolute error (MAE), r-squared, and adjusted r-squared
 #' }
 #'
+#' @export
+#'
 #' @examples
 #' # Example 1
 #' x <- data.frame(matrix(sample(100000, 200*5, replace=TRUE), ncol = 5))
@@ -67,8 +69,6 @@
 #' model_stats$beta
 #' model_stats$training_model_eval_metrics
 #' model_stats$testing_model_eval_metrics
-#'
-#' @export
 #'
 
 ## If the `Rcpp` library is not yet installed, uncomment and run the command below to install it
