@@ -21,6 +21,16 @@ The methods perform linear least squares using the following known formulas for 
 
 View the "HW4-tutorial" R-markdown vignette for more information about the accuracy of the beta coefficients produced by the `get_lin_least_sq_model` compared to the default, benchmark `lm` function. Also explained in the "HW4-tutorial" vignette is the efficiency of the `get_lin_least_sq_model` at generating the beta coefficients compared to that of the `lm` function.
 
+In order to make sure the vignette works properly, the libraries "Rcpp" and "bench" need to be properly installed and loaded. In case they are not, run the following lines to install and load them.
+
+```
+install.packages("Rcpp")
+library(Rcpp)
+
+devtools::install_github("r-lib/bench")
+library(bench)
+```
+
 ## Functions:
 
 ### get_lin_least_sq_model
